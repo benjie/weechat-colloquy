@@ -3,12 +3,12 @@ Colloquy iOS / Weechat Push
 
 Put this in `~/.weechat/python/` and then in weechat run:
 
-    /python load python/colloquy.py
+    /python load python/colloquy_push.py
 
 If you want it to auto load then change directory into
 `~/.weechat/python/autoload/` and run:
 
-    ln -s ../colloquy.py ./
+    ln -s ../colloquy_push.py ./
 
 How it works
 ------------
