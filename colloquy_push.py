@@ -4,18 +4,15 @@ import socket
 import ssl
 
 weechat.register("colloquy_push", "Benjie", "0.1", "MIT", "Implements Colloquy's iOS push notifications", "", "")
-weechat.prnt("", "colloquy_push loaded")
 
 clients_in_progress = {}
 known_clients = None
 known_clients_string = weechat.config_get_plugin('known_clients')
-weechat.prnt("", "colloquy: settings string: %s" % known_clients_string)
 if known_clients_string is not None:
     try:
         known_clients = json.loads(known_clients_string)
     except: pass
 if type(known_clients) is not dict:
-    weechat.prnt("", "colloquy: resetting known_clients because %s" % known_clients)
     known_clients = {}
 
 def push_cb(data, signal, signal_data):
@@ -43,7 +40,7 @@ def push_cb(data, signal, signal_data):
         clients_in_progress[client]['name'] = name
     elif client in clients_in_progress:
         if cmd == "end-device":
-            weechat.prnt("", "Got all details from device: %s" % json.dumps(clients_in_progress[client]))
+            weechat.prnt("", "colloquy_push: received all details from device: %s" % json.dumps(clients_in_progress[client]))
             known_clients[clients_in_progress[client]['token']] = clients_in_progress[client]
             weechat.config_set_plugin('known_clients', json.dumps(known_clients))
             del clients_in_progress[client]
@@ -63,7 +60,7 @@ def push_cb(data, signal, signal_data):
             rest = rest.lstrip(":")
             clients_in_progress[client]['message-sound'] = rest
         else:
-            weechat.prnt("", "Colloquy: didn't understand command: %s" % cmd)
+            weechat.prnt("", "colloquy_push: warning: didn't understand command: %s" % cmd)
     return weechat.WEECHAT_RC_OK
 
 weechat.hook_signal("*,irc_outtags_push", "push_cb", "")
@@ -93,7 +90,7 @@ def show_notification(chan, nick, message):
         server = details['server']
         port = details['port']
         port = int(port)
-        weechat.prnt("", "colloquy push: %s to (%s:%d)" % (json.dumps(payload), server, port))
+        weechat.prnt("", "colloquy_push: sending %s to (%s:%d)" % (json.dumps(payload), server, port))
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.settimeout(5)
 
