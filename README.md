@@ -25,6 +25,3 @@ aren't responding fast enough you may have Weechat lock up for 5 seconds or so.
 
 Is written by someone who doesn't really know Python, so is probably terribly
 coded. (Pull requests gratefully received.)
-
-Possibly prevents relaying from sending through the backlog. Unsure on this -
-my back log is no longer coming through, but this may be unrelated...
